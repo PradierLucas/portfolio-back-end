@@ -5,9 +5,7 @@
 package com.primerApp.SpringBoot.Controller;
 
 import com.primerApp.SpringBoot.model.Persona;
-
-import com.primerApp.SpringBoot.services.PersonaService;
-
+import com.primerApp.SpringBoot.repository.PersonaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,45 +16,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("persona")
+@RequestMapping("/persona/")
 @CrossOrigin (origins = "http://localhost:4200")
 public class PersonaController {
     
   
     @Autowired
-    public PersonaService persoServ;
+    public PersonaRepository persorepo;
    
-    
-    @PostMapping ("/new/persona")
-    public void agregarPersona(@RequestBody Persona pers){
-     persoServ.crearPersona(pers);
-       
+        
+    @DeleteMapping("/borrar/persona/{id}")
+    public void borrarPersona(@PathVariable Long id){
+        persorepo.deleteById(id);
     }
     
-   @PutMapping ("/edit/persona")
-   public void editarPersona(Persona pers){
-       persoServ.editPersona(pers);
+    @PostMapping("/crear/persona")
+    public void crearPersona(@RequestBody Persona pers){
+        persorepo.save(pers);
+    }
+    
+   @PutMapping ("/editar/persona/{id}")
+   public void editarPersona(@PathVariable Long id, @RequestBody  Persona pers){
+       Persona persona = persorepo.findById(id).orElse(null);
+
+        persona.setNombre(pers.getNombre());
+        persona.setApellido(pers.getApellido());
+        persona.setTitulo(pers.getTitulo());
+        persona.setFoto(pers.getFoto());
+        persona.setDescripcion(pers.getDescripcion());
+        
+        persorepo.save(persona);
    }
-    
-    @DeleteMapping ("/elimPersona/{id}")
-    
-    public void eliminarPersonas(@PathVariable Long id){
-        
-        persoServ.delPersona(id);
-        
-    }
-    
-    
-    
-     @GetMapping ("/ver/personas")
+ 
+    @GetMapping ("/ver/personas")
     @ResponseBody
-    public List<Persona> verPersonas(){
-        return persoServ.verPersonas();
+    public List<Persona> verPersona(){
+        return persorepo.findAll();
        
     }
 }

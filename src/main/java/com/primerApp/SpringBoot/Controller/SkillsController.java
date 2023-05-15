@@ -4,10 +4,9 @@
  */
 package com.primerApp.SpringBoot.Controller;
 
-
 import com.primerApp.SpringBoot.model.Skills;
+import com.primerApp.SpringBoot.repository.SkillsRepository;
 
-import com.primerApp.SpringBoot.services.SkillsService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,51 +20,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
- @RestController
- @RequestMapping("skills")
-@CrossOrigin (origins = "http://localhost:4200")
+@RestController
+@RequestMapping("/skills/")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SkillsController {
-    
 
-
-
-    
-  
     @Autowired
-    public SkillsService skillServ;
-   
-    
-    @PostMapping ("/new/skill")
-    public void agregarSkill(@RequestBody Skills skill){
-     skillServ.crearSkill(skill);
-       
+    public SkillsRepository skillrepo;
+
+    @PostMapping("/new/skill")
+    public void agregarSkill(@RequestBody Skills skill) {
+        skillrepo.save(skill);
+
     }
-    
-   
-    
-    @DeleteMapping ("/elimSk/{id}")
-    
-    public void eliminarSkill(@PathVariable Long id){
-        
-        skillServ.delSkills(id);
-        
+
+    @DeleteMapping("/elim/skill/{id}")
+
+    public void eliminarSkill(@PathVariable Long id) {
+
+        skillrepo.deleteById(id);
+
     }
-    
-    
-    
-     @GetMapping ("/ver/skill")
+
+    @GetMapping("/ver/skills")
     @ResponseBody
-    public List<Skills> verSkills(){
-        return skillServ.verSkills();
-       
+    public List<Skills> verSkills() {
+        return skillrepo.findAll();
+
     }
-    
-    @PutMapping ("/editar/skill")
-    
-    public void editarSkill (@RequestBody Skills skill){
-        skillServ.editSkill(skill);
+
+    @PutMapping("/editar/skill/{id}")
+
+    public void editarSkill(@PathVariable Long id, @RequestBody Skills ski) {
+
+        Skills skill = skillrepo.findById(id).orElse(null);
+
+        skill.setNombre(ski.getNombre());
+        skill.setPorcentaje(ski.getPorcentaje());
+
+        skillrepo.save(skill);
     }
-    
-    
+
 }

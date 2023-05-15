@@ -5,8 +5,9 @@
 package com.primerApp.SpringBoot.Controller;
 
 
-import com.primerApp.SpringBoot.model.Educacion;
-import com.primerApp.SpringBoot.repository.EducacionRepository;
+
+import com.primerApp.SpringBoot.model.Login;
+import com.primerApp.SpringBoot.repository.LoginRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,51 +21,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 
-@RequestMapping("/edu/")
-@CrossOrigin (origins = "http://localhost:4200")   
-  public class EducacionController {
-    @Autowired
-    public EducacionRepository edurepo;
+@RequestMapping("/login/")
+@CrossOrigin (origins = "http://localhost:4200")
+public class LoginController {
+      @Autowired
+    public LoginRepository logrepo;
    
     
-    @PostMapping ("/new/edu")
-    public void agregarEdu(@RequestBody Educacion edu){
-     edurepo.save(edu);
+    @PostMapping ("/new/log")
+    public void agregarLog(@RequestBody Login log){
+     logrepo.save(log);
        
     }
     
-   @PutMapping ("/edit/edu/{id}")
-   public void editarPersona(@PathVariable Long id, @RequestBody Educacion edu){
+   @PutMapping ("/edit/log/{id}")
+   public void editarPersona(@PathVariable Long id, @RequestBody Login log){
             
-       Educacion educacion = edurepo.findById(id).orElse(null);
+       Login login = logrepo.findById(id).orElse(null);
        
-       educacion.setNombre(edu.getNombre());
-       educacion.setTitulo(edu.getTitulo());
-       educacion.setFechaInicio(edu.getFechaInicio());
-       educacion.setFechaFin(edu.getFechaFin());
-       
-       edurepo.save(educacion);
+       login.setEmail(log.getEmail());
+       login.setPassword(log.getPassword());
+     
+       logrepo.save(login);
    }
     
     @DeleteMapping ("/elim/{id}")
     
-    public void eliminarEdu(@PathVariable Long id){
+    public void eliminarLog(@PathVariable Long id){
         
-        edurepo.deleteById(id);
+        logrepo.deleteById(id);
         
     }
     
     
     
-     @GetMapping ("/ver/edu")
+     @GetMapping ("/ver/log")
     @ResponseBody
-    public List<Educacion> verEdu(){
-        return edurepo.findAll();
+    public List<Login> verEdu(){
+        return logrepo.findAll();
        
-    }
-
-    
+    }  
 }

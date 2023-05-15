@@ -1,4 +1,3 @@
-
 package com.primerApp.SpringBoot.services;
 
 import com.primerApp.SpringBoot.model.Skills;
@@ -8,34 +7,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillsService {
-     
-   @Autowired
-    
+public class SkillsService implements ISkillsServicio {
+
+    @Autowired
+
     public SkillsRepository skillsrepo;
 
-    public List<Skills> verSkills() {
+    @Override
+    public List<Skills> verSkill() {
         return skillsrepo.findAll();
-        
+
     }
 
+    @Override
     public void crearSkill(Skills skill) {
-        
+
         skillsrepo.save(skill);
     }
 
-    public void delSkills(Long id) {
+    @Override
+    public void delSkill(Long id) {
         skillsrepo.deleteById(id);
     }
 
-    public Skills buscarSkill(Long id) {
-        
-       return skillsrepo.findById(id).orElse(null);
-    }
-
+    @Override
     public void editSkill(Skills skill) {
         skillsrepo.save(skill);
     }
-   
-    
+
+    @Override
+    public Skills buscarSkill(Long id) {
+        return skillsrepo.findById(id).orElse(null);    }
+
 }

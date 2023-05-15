@@ -1,4 +1,3 @@
-
 package com.primerApp.SpringBoot.services;
 
 import com.primerApp.SpringBoot.model.Persona;
@@ -8,36 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PersonaService  {
+public class PersonaService implements IPersonaServicio {
 
-@Autowired
+    @Autowired
 
-public PersonaRepository persoRepo;
+    public PersonaRepository persoRepo;
 
-   
-    public List<Persona> verPersonas() {
+    @Override
+    public List<Persona> verPersona() {
         return persoRepo.findAll();
     }
 
- 
+    @Override
     public void crearPersona(Persona pers) {
-        
         persoRepo.save(pers);
     }
 
-
-    public void delPersona(Long id) {
-persoRepo.deleteById(id);    }
-
- 
-    public Persona buscarPersona(Long id) {
-    return persoRepo.findById(id).orElse(null);  
-    }
-
-    
+    @Override
     public void editPersona(Persona pers) {
         persoRepo.save(pers);
     }
-    
-   
+
+    @Override
+    public Persona buscarPersona(Long id) {
+        return persoRepo.findById(id).orElse(null);    }
+
+    @Override
+    public void borrarPersona(Long id) {
+persoRepo.deleteById(id);    }
 }
